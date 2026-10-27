@@ -51,19 +51,19 @@ resource "bunnynet_pullzone" "bogolyandras_com" {
   }
 }
 
-# Redirects to https and www are done by the edge rules below, so force_ssl stays off
+# force_ssl redirects http to https on the same host; the edge rules below do the same plus the redirect to www
 resource "bunnynet_pullzone_hostname" "bogolyandras_com_root" {
   pullzone    = bunnynet_pullzone.bogolyandras_com.id
   name        = local.website_root_domain
   tls_enabled = true
-  force_ssl   = false
+  force_ssl   = true
 }
 
 resource "bunnynet_pullzone_hostname" "bogolyandras_com_www" {
   pullzone    = bunnynet_pullzone.bogolyandras_com.id
   name        = local.website_www_domain
   tls_enabled = true
-  force_ssl   = false
+  force_ssl   = true
 }
 
 resource "bunnynet_pullzone_edgerule" "bogolyandras_com_block_bots" {
