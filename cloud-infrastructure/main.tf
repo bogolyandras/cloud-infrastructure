@@ -23,3 +23,13 @@ terraform {
     region     = "eu-west-1"
   }
 }
+
+# Passed in as a variable (TF_VAR_bunnynet_api_key) so it can also be handed to the website's deploy workflow
+variable "bunnynet_api_key" {
+  type      = string
+  sensitive = true
+}
+
+provider "bunnynet" {
+  api_key = var.bunnynet_api_key
+}

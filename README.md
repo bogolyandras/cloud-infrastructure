@@ -16,7 +16,7 @@ Secrets live outside the repo in a SOPS file encrypted with age (`~/.secrets/inf
 sops exec-env "$HOME\.secrets\infra.enc.env" "tofu plan"
 ```
 
-The file provides `BUNNYNET_API_KEY`, `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `GITHUB_TOKEN` and `TF_ENCRYPTION`.
+The file provides `TF_VAR_bunnynet_api_key` (also passed to the website's deploy workflow), `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `GITHUB_TOKEN` and `TF_ENCRYPTION`.
 
 ## State
 
