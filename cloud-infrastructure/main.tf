@@ -23,30 +23,3 @@ terraform {
     region     = "eu-west-1"
   }
 }
-
-resource "bunnynet_storage_zone" "bogolyandras_com_storage" {
-  name      = "bogolyandras-com-storage"
-  region    = "DE"
-  zone_tier = "Edge"
-
-  custom_404_file_path = "/404.html"
-  replication_regions = ["SG", "NY"]
-}
-
-resource "bunnynet_storage_zone" "bogolyandras_com_storage-a" {
-  name      = "bogolyandras-com-storage-a"
-  region    = "DE"
-  zone_tier = "Edge"
-
-  custom_404_file_path = "/404.html"
-  replication_regions = ["SG", "NY"]
-}
-
-resource "bunnynet_storage_zone" "bogolyandras_com_storage-b" {
-  name      = "bogolyandras-com-storage-b"
-  region    = "DE"
-  zone_tier = "Edge"
-
-  custom_404_file_path = "/404.html"
-  replication_regions = ["SG", "NY"]
-}

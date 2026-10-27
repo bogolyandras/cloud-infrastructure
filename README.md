@@ -5,7 +5,7 @@ OpenTofu configuration for my personal infrastructure on AWS, bunny.net and GitH
 | Folder | What it manages |
 |---|---|
 | `master-state-buckets/` | The S3 bucket (versioned) that holds the state of every folder, including its own |
-| `cloud-infrastructure/` | bunny.net DNS zones (`bogolyandras.com`, `cestlavie.ovh`) and the storage zones for bogolyandras.com; an S3 bucket for certificates and an IAM user with an access key for it; the GitHub repository of this code |
+| `cloud-infrastructure/` | bunny.net DNS zones (`bogolyandras.com`, `cestlavie.ovh`) and the storage zones for bogolyandras.com; an S3 bucket for certificates and an IAM user with an access key for it; the GitHub repositories of this code and of the personal website (`personal-website-astro`) |
 | `modules/` | Shared modules (`s3_bucket`, `s3_object_single_file_user_access`) |
 
 ## Running
