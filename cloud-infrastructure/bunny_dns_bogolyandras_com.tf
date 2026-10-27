@@ -19,7 +19,7 @@ resource "bunnynet_dns_record" "bogolyandras_com_root" {
 
   name  = ""
   type  = "CNAME"
-  value = "bogolyandras-test.b-cdn.net"
+  value = local.website_cdn_hostname
 }
 
 resource "bunnynet_dns_record" "bogolyandras_com_www" {
@@ -27,5 +27,5 @@ resource "bunnynet_dns_record" "bogolyandras_com_www" {
 
   name  = "www"
   type  = "CNAME"
-  value = "bogolyandras-test.b-cdn.net"
+  value = local.website_cdn_hostname
 }
