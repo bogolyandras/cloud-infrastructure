@@ -20,6 +20,14 @@ resource "bunnynet_storage_zone" "bogolyandras_com_storage-b" {
 resource "bunnynet_pullzone" "bogolyandras_com" {
   name = "bogolyandras-com"
 
+  cors_enabled         = false
+  log_anonymized       = false
+  errorpage_whitelabel = true
+
+  # TLS 1.2 and 1.3 are always on; tls_support lists the older versions also accepted
+  tls_level   = "Compatible"
+  tls_support = ["TLSv1.1"]
+
   origin {
     type        = "StorageZone"
     storagezone = bunnynet_storage_zone.bogolyandras_com_storage-a.id
