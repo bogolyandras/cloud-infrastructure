@@ -34,6 +34,10 @@ output "bogolyandras_com_storage-b_password" {
   sensitive = true
 }
 
+output "contact_form_api_endpoint" {
+  value = aws_apigatewayv2_api.contact_form.api_endpoint
+}
+
 output "certificate_bucket_name" {
   value = module.certificate_bucket.bucket_name
 }

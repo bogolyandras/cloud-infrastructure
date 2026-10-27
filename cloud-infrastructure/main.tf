@@ -12,6 +12,10 @@ terraform {
       source  = "integrations/github"
       version = "~> 6.13"
     }
+    archive = {
+      source  = "hashicorp/archive"
+      version = "~> 2.7"
+    }
   }
   backend "s3" {
     bucket     = "terraform-state-bucket-20250813232413057000000001"
