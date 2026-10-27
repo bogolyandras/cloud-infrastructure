@@ -1,0 +1,24 @@
+# State lives in the S3 backend; local copies are migration leftovers and contain secrets
+*.tfstate
+*.tfstate.*
+
+# Per-machine provider/module cache and backend config
+.terraform/
+
+# Saved plans and crash logs can contain secret values
+*.tfplan
+crash.log
+crash.*.log
+
+# Variable files usually hold secrets (secrets come from SOPS instead)
+*.tfvars
+*.tfvars.json
+
+# Local-only overrides
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# IDE
+.idea/
