@@ -219,3 +219,56 @@ resource "bunnynet_pullzone_edgerule" "bogolyandras_com_txt_content_type" {
     parameter2 = null
   }]
 }
+
+# The storage zone answers with a ~300 day max-age, so browsers kept serving old pages
+# until a hard refresh. The edge cache keeps that long lifetime (the deploy purges it);
+# only the header sent to browsers is replaced here.
+
+# Unhashed files (HTML, favicons, sitemaps) are revalidated on every load; the ETag turns
+# an unchanged file into a 304 without a body
+resource "bunnynet_pullzone_edgerule" "bogolyandras_com_cache_revalidate" {
+  pullzone    = bunnynet_pullzone.bogolyandras_com.id
+  description = "Browsers revalidate unhashed files"
+  enabled     = true
+
+  actions = [{
+    type       = "SetResponseHeader"
+    parameter1 = "Cache-Control"
+    parameter2 = "no-cache"
+    parameter3 = null
+  }]
+
+  # Excludes /_astro/ instead of relying on rule order against the rule below
+  match_type = "MatchAll"
+  triggers = [{
+    type       = "Url"
+    match_type = "MatchNone"
+    patterns   = ["*/_astro/*"]
+    parameter1 = null
+    parameter2 = null
+  }]
+}
+
+# Astro puts its bundled CSS, JS and images under /_astro/ with a content hash in the
+# name, so a changed file always gets a new URL and the old one can be kept forever
+resource "bunnynet_pullzone_edgerule" "bogolyandras_com_cache_immutable" {
+  pullzone    = bunnynet_pullzone.bogolyandras_com.id
+  description = "Browsers keep hashed Astro assets for a year"
+  enabled     = true
+
+  actions = [{
+    type       = "SetResponseHeader"
+    parameter1 = "Cache-Control"
+    parameter2 = "public, max-age=31536000, immutable"
+    parameter3 = null
+  }]
+
+  match_type = "MatchAny"
+  triggers = [{
+    type       = "Url"
+    match_type = "MatchAny"
+    patterns   = ["*/_astro/*"]
+    parameter1 = null
+    parameter2 = null
+  }]
+}
