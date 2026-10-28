@@ -21,8 +21,9 @@ OpenTofu (not Terraform) configuration for AWS, bunny.net and GitHub. See `READM
 - Static websites on bunny.net use `modules/bunny_static_website`: blue/green storage zones, a pull zone, hostnames
   with `force_ssl`, and edge rules for redirects, HSTS, bot blocking and browser cache headers.
 - `hostname` is the canonical host; `redirect_from` hosts and the pull zone's b-cdn.net hostname 301 to it.
-- Only a site serving the registrable domain (e.g. `bogolyandras.com` redirecting to www) sets `hsts` with `preload`;
-  subdomain sites keep the default, which the parent's preload already covers.
+- Every custom hostname sends `hsts` (default without `preload`). Only a site serving the registrable domain sets
+  `hsts_preload_domain` (e.g. `bogolyandras.com`), and only that host adds `; preload`; the preload list entry then
+  covers every subdomain.
 - Outside the module, per site: a DNS CNAME for each hostname to the module's `cdn_hostname`, and the deploy
   workflow inputs (GitHub Actions secrets and variables) from its outputs.
 

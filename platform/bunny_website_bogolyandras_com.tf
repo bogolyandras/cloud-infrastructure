@@ -5,6 +5,6 @@ module "bogolyandras_com" {
   hostname      = "www.bogolyandras.com"
   redirect_from = ["bogolyandras.com"]
 
-  # Only the registrable domain may ask for preload; it then covers every subdomain
-  hsts = "max-age=63072000; includeSubDomains; preload"
+  # The preload list entry for the registrable domain covers every subdomain
+  hsts_preload_domain = "bogolyandras.com"
 }

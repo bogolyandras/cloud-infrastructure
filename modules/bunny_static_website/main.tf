@@ -2,7 +2,8 @@ locals {
   # cdn_domain is only the shared suffix (b-cdn.net); the zone's own host is prefixed with its name
   cdn_hostname = "${bunnynet_pullzone.this.name}.${bunnynet_pullzone.this.cdn_domain}"
 
-  all_hostnames = concat(var.redirect_from, [var.hostname])
+  all_hostnames  = concat(var.redirect_from, [var.hostname])
+  hsts_hostnames = [for h in local.all_hostnames : h if h != var.hsts_preload_domain]
 }
 
 # Two storage zones for blue/green deploys: the site's deploy workflow uploads to the one
@@ -116,8 +117,11 @@ resource "bunnynet_pullzone_edgerule" "redirect_to_hostname" {
 }
 
 # Sent on every custom hostname, including the redirect_from ones: HSTS preload requires
-# the header on the registrable domain's redirect too
+# the header on the registrable domain's redirect too. The hsts_preload_domain host gets
+# its own rule below, as an edge rule sets one fixed header value.
 resource "bunnynet_pullzone_edgerule" "hsts" {
+  count = length(local.hsts_hostnames) > 0 ? 1 : 0
+
   pullzone    = bunnynet_pullzone.this.id
   description = "HSTS header"
   enabled     = true
@@ -144,11 +148,55 @@ resource "bunnynet_pullzone_edgerule" "hsts" {
     {
       type       = "Url"
       match_type = "MatchAny"
-      patterns   = [for h in local.all_hostnames : "https://${h}*"]
+      patterns   = [for h in local.hsts_hostnames : "https://${h}*"]
       parameter1 = null
       parameter2 = null
     },
   ]
+}
+
+# The preload list only reads the registrable domain's header; on any other host
+# the directive would be ignored, so only that one host asks for it
+resource "bunnynet_pullzone_edgerule" "hsts_preload" {
+  count = var.hsts_preload_domain == null ? 0 : 1
+
+  pullzone    = bunnynet_pullzone.this.id
+  description = "HSTS header with preload"
+  enabled     = true
+
+  depends_on = [bunnynet_pullzone_hostname.this]
+
+  actions = [{
+    type       = "SetResponseHeader"
+    parameter1 = "Strict-Transport-Security"
+    parameter2 = "${var.hsts}; preload"
+    parameter3 = null
+  }]
+
+  match_type = "MatchAll"
+  triggers = [
+    {
+      type       = "RequestMethod"
+      match_type = "MatchAny"
+      patterns   = ["GET"]
+      parameter1 = null
+      parameter2 = null
+    },
+    {
+      type       = "Url"
+      match_type = "MatchAny"
+      patterns   = ["https://${var.hsts_preload_domain}*"]
+      parameter1 = null
+      parameter2 = null
+    },
+  ]
+
+  lifecycle {
+    precondition {
+      condition     = contains(local.all_hostnames, var.hsts_preload_domain)
+      error_message = "hsts_preload_domain must be the hostname or one of redirect_from."
+    }
+  }
 }
 
 resource "bunnynet_pullzone_edgerule" "txt_content_type" {

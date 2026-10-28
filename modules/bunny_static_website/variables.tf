@@ -15,9 +15,15 @@ variable "redirect_from" {
 }
 
 variable "hsts" {
-  description = "Strict-Transport-Security value; add '; preload' only on a site that serves the registrable domain"
+  description = "Strict-Transport-Security value for the custom hostnames, without the preload directive"
   type        = string
   default     = "max-age=63072000; includeSubDomains"
+}
+
+variable "hsts_preload_domain" {
+  description = "Registrable domain among the site's hostnames that sends the hsts value with '; preload' appended"
+  type        = string
+  default     = null
 }
 
 variable "storage_region" {
