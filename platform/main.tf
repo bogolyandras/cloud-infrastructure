@@ -19,7 +19,7 @@ terraform {
   }
   backend "s3" {
     bucket     = "terraform-state-bucket-20250813232413057000000001"
-    key        = "bunny.tfstate"
+    key        = "platform.tfstate"
     region     = "eu-west-1"
   }
 }
