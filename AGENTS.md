@@ -2,7 +2,8 @@
 
 OpenTofu (not Terraform) configuration for AWS, bunny.net and GitHub. See `README.md` for the folder layout.
 
-- Each top-level folder is a separate root module with its own S3 backend key; run commands inside the folder.
+- Each top-level folder except `modules/` is a separate root module with its own S3 backend key (`<folder>.tfstate`);
+  run commands inside the folder.
 - Run tofu through SOPS so credentials and state encryption are present:
   `sops exec-env "$HOME/.secrets/infra.enc.env" "tofu plan"`. Never print or commit decrypted secrets.
 - State is encrypted via the `TF_ENCRYPTION` env var from the SOPS file; do not add `encryption` blocks to the code.
@@ -13,6 +14,17 @@ OpenTofu (not Terraform) configuration for AWS, bunny.net and GitHub. See `READM
 - Provider versions use `~>` constraints; each folder's `.terraform.lock.hcl` is committed and pins the exact versions.
   Upgrade with `tofu init -upgrade -backend=false`, then commit the updated lock files.
 - Files use LF line endings (`core.autocrlf` is off); don't let edits convert them to CRLF.
+- Moving resources into a module or renaming them needs `moved` blocks; the plan must show moves, not destroy/create.
+
+## Websites
+
+- Static websites on bunny.net use `modules/bunny_static_website`: blue/green storage zones, a pull zone, hostnames
+  with `force_ssl`, and edge rules for redirects, HSTS, bot blocking and browser cache headers.
+- `hostname` is the canonical host; `redirect_from` hosts and the pull zone's b-cdn.net hostname 301 to it.
+- Only a site serving the registrable domain (e.g. `bogolyandras.com` redirecting to www) sets `hsts` with `preload`;
+  subdomain sites keep the default, which the parent's preload already covers.
+- Outside the module, per site: a DNS CNAME for each hostname to the module's `cdn_hostname`, and the deploy
+  workflow inputs (GitHub Actions secrets and variables) from its outputs.
 
 ## Lambda
 
