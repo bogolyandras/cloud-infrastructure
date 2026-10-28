@@ -25,8 +25,9 @@ OpenTofu (not Terraform) configuration for AWS, bunny.net and GitHub. See `READM
 - Every custom hostname sends `hsts` (default without `preload`). Only a site serving the registrable domain sets
   `hsts_preload_domain` (e.g. `bogolyandras.com`), and only that host adds `; preload`; the preload list entry then
   covers every subdomain.
-- Outside the module, per site: a DNS CNAME for each hostname to the module's `cdn_hostname`, and the deploy
-  workflow inputs (GitHub Actions secrets and variables) from its outputs.
+- Sites deployed by a GitHub workflow also call `modules/bunny_static_website_deploy` with the repository and the
+  website module: a `production` environment limited to `main`, and the `BUNNY_*` secrets and variable.
+- Outside the modules, per site: a DNS CNAME for each hostname to the website module's `cdn_hostname`.
 
 ## Lambda
 

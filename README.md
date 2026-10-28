@@ -6,7 +6,7 @@ OpenTofu configuration for my personal infrastructure on AWS, bunny.net and GitH
 |---|---|
 | `bootstrap/` | The S3 bucket (versioned) that holds the state of every folder, including its own |
 | `platform/` | bunny.net DNS zones (`bogolyandras.com`, `cestlavie.ovh`) and the bogolyandras.com website (pull zone, blue/green storage zones, edge rules); an S3 bucket for certificates and an IAM user with an access key for it; the GitHub repositories of this code and of the personal website (`personal-website-astro`) |
-| `modules/` | Shared modules (`bunny_static_website`, `s3_bucket`, `s3_object_single_file_user_access`) |
+| `modules/` | Shared modules (`bunny_static_website`, `bunny_static_website_deploy`, `s3_bucket`, `s3_object_single_file_user_access`) |
 
 ## Running
 
