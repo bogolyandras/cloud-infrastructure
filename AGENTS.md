@@ -14,6 +14,7 @@ OpenTofu (not Terraform) configuration for AWS, bunny.net and GitHub. See `READM
 - Provider versions use `~>` constraints; each folder's `.terraform.lock.hcl` is committed and pins the exact versions.
   Upgrade with `tofu init -upgrade -backend=false`, then commit the updated lock files.
 - Files use LF line endings (`core.autocrlf` is off); don't let edits convert them to CRLF.
+- Run `tofu fmt -recursive` from the repo root before committing.
 - Moving resources into a module or renaming them needs `moved` blocks; the plan must show moves, not destroy/create.
 
 ## Websites
