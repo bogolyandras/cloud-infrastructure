@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     bunnynet = {
-      source = "BunnyWay/bunnynet"
+      source  = "BunnyWay/bunnynet"
       version = "~> 0.19"
     }
     aws = {
@@ -18,9 +18,9 @@ terraform {
     }
   }
   backend "s3" {
-    bucket     = "terraform-state-bucket-20250813232413057000000001"
-    key        = "platform.tfstate"
-    region     = "eu-west-1"
+    bucket = "terraform-state-bucket-20250813232413057000000001"
+    key    = "platform.tfstate"
+    region = "eu-west-1"
   }
 }
 

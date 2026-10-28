@@ -1,7 +1,7 @@
 resource "bunnynet_dns_zone" "bogolyandras_com" {
-  domain = "bogolyandras.com"
+  domain         = "bogolyandras.com"
   dnssec_enabled = true
-  log_enabled = true
+  log_enabled    = true
   log_anonymized = false
 }
 
@@ -11,7 +11,7 @@ resource "bunnynet_dns_record" "bogolyandras_com_caa" {
   name  = ""
   type  = "CAA"
   value = "letsencrypt.org"
-  tag = "issue"
+  tag   = "issue"
 }
 
 resource "bunnynet_dns_record" "bogolyandras_com_root" {
